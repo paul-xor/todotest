@@ -8,7 +8,7 @@ router.param('id', todoController.checkID);
 router
   .route('/')
   .get(todoController.getAllTodos)
-  .post(todoController.createTodo);
+  .post(todoController.checkBody, todoController.createTodo);
 
 router
   .route('/:id')

@@ -15,6 +15,20 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+/* 
+  Create a checkBody middleware just to check comming data.
+  I have selected here: name, price & summary. If not send 404. 
+*/
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price || !req.body.summary) {
+    return res.status(400).json({
+      status: 'fail.',
+      message: '☠️ Bad request: name, price or summary is missing.'
+    });
+  }
+  next();
+};
+
 exports.getAllTodos = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
