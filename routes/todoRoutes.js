@@ -1,7 +1,9 @@
 const express = require('express');
-const fs = require('fs');
+
 const todoController = require('./../controllers/todoController');
 const router = express.Router();
+
+router.param('id', todoController.checkID);
 
 router
   .route('/')
