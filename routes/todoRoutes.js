@@ -9,6 +9,9 @@ router
   .route('/top-5-cheap')
   .get(todoController.aliasTopTodo, todoController.getAllTodos);
 
+router.route('/todo-stats').get(todoController.getTodoStats);
+router.route('/monthly-plan/:year').get(todoController.getMonthlyPlan);
+
 router
   .route('/')
   .get(todoController.getAllTodos)
