@@ -1,8 +1,30 @@
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 
 const app = require('./app');
 
+const DB = process.env.DATABASE.replace(
+    '<PASSWORD>',
+    process.env.DATABASE_PASSWORD
+);
+
+
+// mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true }).
+//   catch(error => handleError(error));
+
+mongoose
+    // .connect(process.env.DATABASE_LOCAL, {
+    .connect(DB, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true
+    }).catch(err => console.log(err))
+    .then(con => {
+        //console.log(con.connections);
+        console.log('DB connection successful!');
+    });
 
 // console.log(process.env);
 if (process.env.NODE_ENV === 'development') {
