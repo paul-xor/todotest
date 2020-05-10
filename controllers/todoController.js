@@ -1,39 +1,14 @@
 const Todo = require('./../models/todoModel');
 
 // const todos = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/todos.json`)
+//   fs.readFileSync(`${__dirname}/../dev-data/data/todos-simple.json`)
 // );
 
-// exports.checkID = (req, res, next, val) => {
-//   console.log(`tour id is: ${val}`);
-//   if (req.params.id * 1 > todos.length) {
-//     return res.status(404).json({
-//       status: 'fail',
-//       message: 'Invalide ID.'
-//     });
-//   }
-//   next();
-// };
-
-/* 
-  Create a checkBody middleware just to check comming data.
-  I have selected here: name, price & summary. If not send 404. 
-*/
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price || !req.body.summary) {
-    return res.status(400).json({
-      status: 'fail.',
-      message: '☠️ Bad request: name, price or summary is missing.'
-    });
-  }
-  next();
-};
-
 exports.getAllTodos = (req, res) => {
-  console.log(req.requestTime);
+  // console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
-    requestedAt: req.requestTime,
+    requestedAt: req.requestTime
     // results: todos.length,
     // data: {
     //   todos
@@ -42,12 +17,9 @@ exports.getAllTodos = (req, res) => {
 };
 
 exports.getTodo = (req, res) => {
-  console.log(req.params);
-  const id = req.params.id * 1;
-
+  // console.log(req.params);
+  // const id = req.params.id * 1;
   // const todo = todos.find(el => el.id === id);
-
-
   // res.status(200).json({
   //   status: 'success',
   //   data: {
@@ -56,10 +28,25 @@ exports.getTodo = (req, res) => {
   // });
 };
 
-exports.createTodo = (req, res) => {
-  res.status(201).json({
-    status: 'success'
-  });
+exports.createTodo = async (req, res) => {
+  try {
+    // const newTodo = new Todo({});
+    // newTodo.save();
+
+    const newTodo = await Todo.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        todo: newTodo
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data send!'
+    });
+  }
 };
 
 exports.updateTodo = (req, res) => {
