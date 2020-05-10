@@ -4,28 +4,42 @@ const Todo = require('./../models/todoModel');
 //   fs.readFileSync(`${__dirname}/../dev-data/data/todos-simple.json`)
 // );
 
-exports.getAllTodos = (req, res) => {
-  // console.log(req.requestTime);
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime
-    // results: todos.length,
-    // data: {
-    //   todos
-    // }
-  });
+exports.getAllTodos = async (req, res) => {
+  try {
+    const todos = await Todo.find();
+
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: todos.length,
+      data: {
+        todos
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
 };
 
-exports.getTodo = (req, res) => {
-  // console.log(req.params);
-  // const id = req.params.id * 1;
-  // const todo = todos.find(el => el.id === id);
-  // res.status(200).json({
-  //   status: 'success',
-  //   data: {
-  //     todo
-  //   }
-  // });
+exports.getTodo = async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        todo
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
 };
 
 exports.createTodo = async (req, res) => {
@@ -49,13 +63,25 @@ exports.createTodo = async (req, res) => {
   }
 };
 
-exports.updateTodo = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      todo: '< Updated todo here ...>'
-    }
-  });
+exports.updateTodo = async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        todo: todo
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data send!'
+    });
+  }
 };
 
 exports.deleteTodo = (req, res) => {
