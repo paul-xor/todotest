@@ -1,13 +1,25 @@
+/* eslint-disable no-console */
 const Todo = require('./../models/todoModel');
+const APIFeatures = require('./../utils/apiFeatures');
 
-// const todos = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/todos-simple.json`)
-// );
+exports.aliasTopTodo = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
 
 exports.getAllTodos = async (req, res) => {
   try {
-    const todos = await Todo.find();
+    // EXECUTE QUERY
+    const features = new APIFeatures(Todo.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const todos = await features.query;
 
+    // SEND RESPONCE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -44,9 +56,6 @@ exports.getTodo = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
   try {
-    // const newTodo = new Todo({});
-    // newTodo.save();
-
     const newTodo = await Todo.create(req.body);
 
     res.status(201).json({
@@ -58,7 +67,7 @@ exports.createTodo = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Invalid data send!'
+      message: err
     });
   }
 };

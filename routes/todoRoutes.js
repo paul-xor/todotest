@@ -6,6 +6,10 @@ const router = express.Router();
 //router.param('id', todoController.checkID);
 
 router
+  .route('/top-5-cheap')
+  .get(todoController.aliasTopTodo, todoController.getAllTodos);
+
+router
   .route('/')
   .get(todoController.getAllTodos)
   .post(todoController.createTodo);
