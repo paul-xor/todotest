@@ -58,20 +58,6 @@ const todoSchema = new mongoose.Schema(
             type: String,
             trim: true,
             required: [true, 'A todo must have a discription.']
-        },
-        imageCover: {
-            type: String,
-            required: [true, 'A todo must have a cover image.']
-        },
-        images: [String],
-        createdAt: {
-            type: Date,
-            default: Date.now()
-        },
-        startDate: [Date],
-        secretTodo: {
-            type: Boolean,
-            default: false
         }
     },
     {
