@@ -1,6 +1,7 @@
 const express = require('express');
 
 const todoController = require('./../controllers/todoController');
+const authController = require('./../controllers/authController');
 const router = express.Router();
 
 //router.param('id', todoController.checkID);
@@ -14,7 +15,7 @@ router.route('/monthly-plan/:year').get(todoController.getMonthlyPlan);
 
 router
   .route('/')
-  .get(todoController.getAllTodos)
+  .get(authController.protect, todoController.getAllTodos) // protect from users are not loggedin
   .post(todoController.createTodo);
 
 router

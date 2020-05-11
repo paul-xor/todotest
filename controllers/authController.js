@@ -50,6 +50,8 @@ exports.login = catchAsync(async (req, res, next) => {
     token
   });
 });
+
+// this middleware to be used to protect from unauthorized access
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
